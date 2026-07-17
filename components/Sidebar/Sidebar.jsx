@@ -33,8 +33,6 @@ export default function Sidebar() {
     setLineLength(tabMidY)
   }, [hoveredIndex]);
 
-  // Signal tab-hover to the rest of the page (same pattern as --scroll-progress):
-  // the Header's CSS swaps the fishercat sprite when this attribute is present.
   useLayoutEffect(() => {
     document.documentElement.toggleAttribute('data-tab-hovered', hoveredIndex !== null)
     return () => document.documentElement.removeAttribute('data-tab-hovered')
