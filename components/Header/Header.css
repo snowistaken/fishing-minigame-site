@@ -1,0 +1,125 @@
+@media (prefers-reduced-motion: reduce) {
+  .header__cloud img {
+    animation: none;
+  }
+
+  .header__fishercat {
+    animation: none;
+  }
+
+  .header__waves {
+    animation: none;
+  }
+}
+
+@keyframes cloud-drift {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(-0.3vw, 0); }
+  50%  { transform: translate(0px, 0); }
+  75%  { transform: translate(0.3vw, 0); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes wave-move {
+  0%   { background-position: 0 0, bottom; }
+  100% { background-position: var(--wave-tile-width) 0, bottom; }
+}
+
+@keyframes fishercat-bob {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-0.4vw); }
+  100% { transform: translateY(0); }
+}
+
+.header {
+  --logo-width: clamp(220px, 45vw, 800px);
+  --wave-height: 38px;
+  --wave-tile-width: 64px;
+
+  position: relative;
+  background-color: #b9edff;
+  padding: 1vw 0 0;
+  overflow: hidden;
+}
+
+.header__logo {
+  width: var(--logo-width);
+  height: auto;
+  margin: 0 auto;
+  display: block;
+  image-rendering: pixelated;
+  position: relative;
+  z-index: 1;
+
+  transform: translateY(-20%);
+  margin-bottom: calc(var(--logo-width) * 2 / 3 * -0.2);
+}
+
+.header__fishercat {
+  position: absolute;
+  bottom: calc(var(--wave-height) - max(var(--sidebar-width) * 2 / 3 * 0.4, 30px));
+  left: 1.5vw;
+  width: calc(var(--sidebar-width) - 2vw);
+  image-rendering: pixelated;
+  z-index: 1;
+  animation: fishercat-bob 6s ease-in-out infinite;
+}
+
+.header__fishercat--activated {
+  visibility: hidden;
+}
+
+[data-tab-hovered] .header__fishercat--activated {
+  visibility: visible;
+}
+
+[data-tab-hovered] .header__fishercat--idle {
+  visibility: hidden;
+}
+
+.header__cloud {
+  position: absolute;
+  bottom: calc(var(--logo-width) * 0.22);
+  z-index: 2;
+  opacity: calc(1 - var(--scroll-progress, 0) * 12);
+  width: calc(var(--logo-width) * 0.5);
+}
+
+.header__cloud img {
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+  animation: cloud-drift 8s linear infinite;
+}
+
+.header__cloud--left {
+  left: calc(50% - var(--logo-width) * 0.62);
+  transform: translateX(calc(var(--scroll-progress, 0) * -300vw));
+}
+
+.header__cloud--right {
+  right: calc(50% - var(--logo-width) * 0.62);
+  transform: translateX(calc(var(--scroll-progress, 0) * 300vw));
+}
+
+.header__cloud--right img {
+  animation-direction: reverse;
+}
+
+.header__waves {
+  animation: wave-move 6s linear infinite;
+  height: var(--wave-height);
+  position: relative;
+  z-index: 2;
+  background-image:
+    url('../../assets/wave_tile.png'),
+    linear-gradient(
+      transparent               0%  48%,
+      rgba(106, 192, 233, 0.65) 48% 65%,
+      rgba(90, 185, 232, 0.75)  65% 80%,
+      #4ab2e6e2                   80% 100%
+    );
+  background-size: var(--wave-tile-width), cover;
+  background-repeat: repeat-x, no-repeat;
+  image-rendering: pixelated;
+}
