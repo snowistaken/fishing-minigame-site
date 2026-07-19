@@ -1,4 +1,4 @@
-.dialog-box {
+.dialogBox {
   --px: clamp(3px, 0.4vw, 6px);
 
   max-width: 70ch;
@@ -32,6 +32,6 @@
   );
 }
 
-.dialog-box p {
+.dialogBox p {
   margin: 0;
 }

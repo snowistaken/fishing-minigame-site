@@ -1,4 +1,4 @@
-import DialogBox from '../../components/DialogBox/DialogBox.jsx'
+import DialogBox from '@/components/DialogBox/DialogBox.jsx'
 
 export default async function MeetTheBand() {
   return <DialogBox>

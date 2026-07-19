@@ -1,5 +1,5 @@
-import './DialogBox.css'
+import styles from './DialogBox.module.css'
 
 export default function DialogBox({ children }) {
-  return <div className="dialog-box">{children}</div>
+  return <div className={styles.dialogBox}>{children}</div>
 }

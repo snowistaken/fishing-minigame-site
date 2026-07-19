@@ -1,6 +1,6 @@
 'use client'
 
-import { usePageScroll } from '../hooks/usePageScroll'
+import { usePageScroll } from '@/hooks/usePageScroll'
 
 export default function ScrollEffects() {
   usePageScroll()

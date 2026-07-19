@@ -18,7 +18,7 @@
   padding: 0 max(1vw, 6px);
 }
 
-.sidebar__line {
+.sidebarLine {
   position: absolute;
   right: 0.52vw;
   width: 0.125vw;
@@ -29,7 +29,7 @@
   animation: bobber-bob 6s ease-in-out infinite;
 }
 
-.sidebar__line::after {
+.sidebarLine::after {
   --hook-width: 18px;
   width: var(--hook-width);
   height: calc(var(--hook-width) * 32 / 18 + 2px);
@@ -44,7 +44,7 @@
   image-rendering: pixelated;
 }
 
-.sidebar__nav {
+.sidebarNav {
   display: flex;
   flex-direction: column;
   gap: max(0.5vw, 6px);
@@ -53,7 +53,7 @@
   box-sizing: border-box;
 }
 
-.sidebar__tab {
+.sidebarTab {
   display: flex;
   align-items: center;
   gap: max(0.5vw, 6px);
@@ -69,13 +69,13 @@
   transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
 
-.sidebar__tab:hover,
-.sidebar__tab--active {
+.sidebarTab:hover,
+.sidebarTabActive {
   border-color: #c8a96e;
   color: #e8f8e8;
 }
 
-.sidebar__fish-icon {
+.sidebarFish-icon {
   width: clamp(18px, 2vw, 32px);
   height: clamp(18px, 2vw, 32px);
   image-rendering: pixelated;

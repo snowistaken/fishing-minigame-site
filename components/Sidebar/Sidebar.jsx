@@ -2,8 +2,8 @@
 
 import { useState, useRef, useLayoutEffect } from 'react'
 import Link from 'next/link'
-import fisImg from '../../assets/fis.png'
-import './Sidebar.css'
+import fisImg from '@/assets/fis.png'
+import styles from './Sidebar.module.css'
 
 const TABS = [
   { label: 'Home',          id: 'home', url: '/' },
@@ -39,10 +39,10 @@ export default function Sidebar() {
   }, [hoveredIndex]);
 
   return (
-    <aside className="sidebar" ref={sidebarRef}>
+    <aside className={styles.sidebar} ref={sidebarRef}>
 
       <div
-        className="sidebar__line"
+        className={styles.sidebarLine}
         style={{
           top:     `-5px`,
           height:  `${lineLength}px`,
@@ -50,17 +50,17 @@ export default function Sidebar() {
         }}
       />
 
-      <nav className="sidebar__nav">
+      <nav className={styles.sidebarNav}>
         {TABS.map((tab, i) => (
           <Link
             key={tab.id}
             href={tab.url}
             ref={el => tabRefs.current[i] = el}
-            className={`sidebar__tab${hoveredIndex === i ? ' sidebar__tab--active' : ''}`}
+            className={`${styles.sidebarTab} ${hoveredIndex === i ? styles.sidebarTabActive : ''}`}
             onMouseEnter={() => setHoveredIndex(i)}
             onMouseLeave={() => setHoveredIndex(null)}
           >
-            <img src={fisImg.src} alt="" className="sidebar__fish-icon" />
+            <img src={fisImg.src} alt="" className={styles.sidebarFishIcon} />
             <span>{tab.label}</span>
           </Link>
         ))}

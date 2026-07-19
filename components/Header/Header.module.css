@@ -1,13 +1,13 @@
 @media (prefers-reduced-motion: reduce) {
-  .header__cloud img {
+  .cloud img {
     animation: none;
   }
 
-  .header__fishercat {
+  .fishercat {
     animation: none;
   }
 
-  .header__waves {
+  .waves {
     animation: none;
   }
 }
@@ -42,7 +42,7 @@
   overflow: hidden;
 }
 
-.header__logo {
+.logo {
   width: var(--logo-width);
   height: auto;
   margin: 0 auto;
@@ -55,7 +55,7 @@
   margin-bottom: calc(var(--logo-width) * 2 / 3 * -0.2);
 }
 
-.header__fishercat {
+.fishercat {
   position: absolute;
   bottom: calc(var(--wave-height) - max(var(--sidebar-width) * 2 / 3 * 0.4, 30px));
   left: 1.5vw;
@@ -65,19 +65,19 @@
   animation: fishercat-bob 6s ease-in-out infinite;
 }
 
-.header__fishercat--activated {
+.fishercatActivated {
   visibility: hidden;
 }
 
-[data-tab-hovered] .header__fishercat--activated {
+:global([data-tab-hovered]) .fishercatActivated {
   visibility: visible;
 }
 
-[data-tab-hovered] .header__fishercat--idle {
+:global([data-tab-hovered]) .fishercatIdle {
   visibility: hidden;
 }
 
-.header__cloud {
+.cloud {
   position: absolute;
   bottom: calc(var(--logo-width) * 0.22);
   z-index: 2;
@@ -85,28 +85,28 @@
   width: calc(var(--logo-width) * 0.5);
 }
 
-.header__cloud img {
+.cloud img {
   width: 100%;
   height: auto;
   image-rendering: pixelated;
   animation: cloud-drift 8s linear infinite;
 }
 
-.header__cloud--left {
+.cloudLeft {
   left: calc(50% - var(--logo-width) * 0.62);
   transform: translateX(calc(var(--scroll-progress, 0) * -300vw));
 }
 
-.header__cloud--right {
+.cloudRight {
   right: calc(50% - var(--logo-width) * 0.62);
   transform: translateX(calc(var(--scroll-progress, 0) * 300vw));
 }
 
-.header__cloud--right img {
+.cloudRight img {
   animation-direction: reverse;
 }
 
-.header__waves {
+.waves {
   animation: wave-move 6s linear infinite;
   height: var(--wave-height);
   position: relative;
