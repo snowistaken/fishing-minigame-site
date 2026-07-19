@@ -1,5 +1,5 @@
 import AboutUs from '@/components/AboutUs/AboutUs.jsx'
-import { getUpcomingEvents, getPastEvents } from '@/lib/calendar.js'
+import { getUpcomingEvents, getPastEvents } from '@/lib/calendar.ts'
 
 export default async function Home() {
   let upcomingEvents = []
