@@ -1,5 +1,6 @@
 import './globals.css'
 import Header from '../components/Header/Header.jsx'
+import Footer from '../components/Footer/footer.jsx'
 import Sidebar from '../components/Sidebar/Sidebar.tsx'
 import ScrollEffects from '../components/ScrollEffects/ScrollEffects.jsx'
 
@@ -30,7 +31,9 @@ export default function RootLayout({ children }) {
             </div>
 
             <div className="critters" />
-            <div className="lake-bottom" />
+            <div className="lake-bottom">
+              <Footer />
+            </div>
           </main>
         </div>
       </body>

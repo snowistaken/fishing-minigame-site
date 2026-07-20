@@ -114,10 +114,9 @@
   background-image:
     url('../../assets/wave_tile.png'),
     linear-gradient(
-      transparent               0%  48%,
-      rgba(106, 192, 233, 0.65) 48% 65%,
-      rgba(90, 185, 232, 0.75)  65% 80%,
-      #4ab2e6e2                   80% 100%
+      transparent               0%  50%,
+      rgba(90, 185, 232, 0.75)  50% 70%,
+      #4ab2e6e2                   70% 100%
     );
   background-size: var(--wave-tile-width), cover;
   background-repeat: repeat-x, no-repeat;
