@@ -49,5 +49,5 @@ export async function getUpcomingEvents(maxResults: number = 10):
 export async function getPastEvents(maxResults: number = 10):
   Promise<CalendarEvent[]> {
     const now = new Date().toISOString()
-    return fetchEvents(maxResults, '2000-01-01T00:00:00Z', now)
+    return (await fetchEvents(maxResults, '2000-01-01T00:00:00Z', now)).reverse()
 }
