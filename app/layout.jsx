@@ -1,6 +1,6 @@
 import './globals.css'
 import Header from '../components/Header/Header.jsx'
-import Footer from '../components/Footer/footer.jsx'
+import Footer from '../components/Footer/Footer.jsx'
 import Sidebar from '../components/Sidebar/Sidebar.tsx'
 import ScrollEffects from '../components/ScrollEffects/ScrollEffects.jsx'
 
