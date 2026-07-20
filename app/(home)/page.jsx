@@ -1,13 +1,13 @@
 import AboutUs from '@/components/AboutUs/AboutUs.jsx'
-import { getUpcomingEvents, getPastEvents } from '@/lib/calendar.ts'
+import { fetchEvents } from '@/lib/calendar'
 
 export default async function Home() {
   let upcomingEvents = []
   let pastEvents = []
   try {
     ;[upcomingEvents, pastEvents] = await Promise.all([
-      getUpcomingEvents(),
-      getPastEvents(),
+      fetchEvents('upcoming'),
+      fetchEvents('past'),
     ])
   } catch (error) {
     console.error('Calendar fetch failed:', error)
