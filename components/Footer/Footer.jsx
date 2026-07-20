@@ -9,7 +9,7 @@ export default function Footer() {
       <p>
         Site code is <a href="https://github.com/snowistaken/fishing-minigame-site/blob/main/LICENSE">MIT licensed</a> —{' '}
         <a href="https://github.com/snowistaken/fishing-minigame-site">view source on GitHub</a>
-        <a>PixAntiqua font by Gerhard Großmann</a>
+        <a href="https://www.dafont.com/pixantiqua.font">PixAntiqua font by Gerhard Großmann</a>
       </p>
     </footer>
   )
