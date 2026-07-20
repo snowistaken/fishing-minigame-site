@@ -10,7 +10,7 @@ export default function AboutUs({ upcomingEvents = [], pastEvents = [] }) {
           <div key={event.id}>
             <p>{event.summary}</p>
             <p>{event.location}</p>
-            <p>{new Date(event.start.dateTime || event.start.date).toLocaleString()}</p>
+            <p>{new Date(event.start.dateTime || event.start.date).toLocaleString('en-US', { timeZone: 'America/Los_Angeles' })}</p>
           </div>
         ))}
       </DialogBox>
@@ -20,7 +20,13 @@ export default function AboutUs({ upcomingEvents = [], pastEvents = [] }) {
           <div key={event.id}>
             <p>{event.summary}</p>
             <p>{event.location}</p>
-            <p>{new Date(event.start.dateTime || event.start.date).toLocaleString()}</p>
+            <p>{new Date(event.start.dateTime || event.start.date)
+              .toLocaleString('en-US', {
+                timeZone: 'America/Los_Angeles',
+                dateStyle: 'medium',
+                timeStyle: 'short'
+              })}
+            </p>
           </div>
         ))}
       </DialogBox>
