@@ -41,6 +41,7 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
+  position: relative;
 
   background: linear-gradient(
     to bottom,
@@ -70,6 +71,21 @@ body {
   justify-content: flex-start;
   padding: 3vw 8vw;
   flex-direction: column;
+}
+
+.critters {
+  position: absolute;
+  bottom: 15px;
+  right: 60px;
+  width: 100%;
+  height: 180px;
+
+  background-image: url('../assets/critters.png');
+  background-position: bottom right;
+  background-repeat: no-repeat;
+  background-size: contain;
+  image-rendering: pixelated;
+  pointer-events: none;
 }
 
 .lake-bottom {

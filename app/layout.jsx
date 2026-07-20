@@ -29,6 +29,7 @@ export default function RootLayout({ children }) {
               <div className="app-content__pages">{children}</div>
             </div>
 
+            <div className="critters" />
             <div className="lake-bottom" />
           </main>
         </div>
