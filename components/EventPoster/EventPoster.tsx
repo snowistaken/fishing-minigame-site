@@ -6,20 +6,23 @@ import pinRed    from '@/assets/pin_red.png'
 import pinPurp   from '@/assets/pin_purp.png'
 import styles from './EventPoster.module.css'
 
-// Pin colour is picked at random per poster; the tilt cycles through a subtle
-// set by position. Together they make a column look hand-pinned rather than
-// machine-stamped. (Server-rendered, so the random pick stays put per build.)
+// The pin colour steps through this list one poster at a time across the whole
+// page (the index is threaded from AboutUs through EventList), so neighbours
+// never share a colour and a later board continues where the previous one left
+// off. The tilt cycles by the poster's position within its own board.
 const PINS  = [pinGreen, pinYellow, pinRed, pinPurp]
 const TILTS = ['-0.6deg', '0.5deg', '-0.4deg', '0.6deg']
 
 interface EventPosterProps {
   event: FormattedCalendarEvent
-  /** Position in the list; picks the pin colour and tilt. */
+  /** Position within this board; drives the tilt. */
   index: number
+  /** Position in the page-wide colour cycle; drives the pin colour. */
+  pinIndex: number
 }
 
-export default function EventPoster({ event, index }: EventPosterProps) {
-  const pin  = PINS[Math.floor(Math.random() * PINS.length)]
+export default function EventPoster({ event, index, pinIndex }: EventPosterProps) {
+  const pin  = PINS[pinIndex % PINS.length]
   const tilt = TILTS[index % TILTS.length]
 
   // "TBA" is the calendar's placeholder for an unset venue — show it as plain
