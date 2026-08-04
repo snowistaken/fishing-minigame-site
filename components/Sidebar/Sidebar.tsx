@@ -26,7 +26,7 @@ const TABS: Tab[] = [
 // On mobile, a tapped tab reels the line down to it and holds the drawer open
 // this long before sliding it shut — enough for the line to drop, the cat to
 // react, and the destination page to render underneath.
-const TAB_CLOSE_DELAY_MS = 600
+const TAB_CLOSE_DELAY_MS = 450
 
 export default function Sidebar() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
