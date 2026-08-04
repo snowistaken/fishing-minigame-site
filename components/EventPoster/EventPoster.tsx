@@ -22,11 +22,29 @@ export default function EventPoster({ event, index }: EventPosterProps) {
   const pin  = PINS[Math.floor(Math.random() * PINS.length)]
   const tilt = TILTS[index % TILTS.length]
 
+  // "TBA" is the calendar's placeholder for an unset venue — show it as plain
+  // text rather than linking to a meaningless map search.
+  const isTba = event.location?.trim().toUpperCase() === 'TBA'
+
   return (
     <li className={styles.poster} style={{ '--tilt': tilt } as CSSProperties}>
       <img src={pin.src} alt="" className={styles.pin} />
       <p className={styles.summary}>{event.summary}</p>
-      {event.location && <p className={styles.location}>{event.location}</p>}
+      {event.location && (
+        <p className={styles.location}>
+          {isTba ? (
+            event.location
+          ) : (
+            <a
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.location)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {event.location}
+            </a>
+          )}
+        </p>
+      )}
       <p className={styles.date}>{event.displayDate}</p>
     </li>
   )

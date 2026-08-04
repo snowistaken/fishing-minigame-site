@@ -45,6 +45,19 @@
   font-size: clamp(14px, 1.2vw, 18px);
 }
 
+/* The address links to Google Maps but stays ink-coloured to keep the paper
+   look; the underline only appears on hover/keyboard focus to signal it. */
+.location a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.location a:hover,
+.location a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .date {
   font-size: clamp(13px, 1.05vw, 16px);
   opacity: 0.72;
