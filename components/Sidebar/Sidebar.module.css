@@ -4,27 +4,95 @@
   100% { transform: translateY(0); }
 }
 
+@keyframes fishercat-bob {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-0.4vw); }
+  100% { transform: translateY(0); }
+}
+
+/* Desktop: the whole sidebar (cat + line + tabs) is anchored to <main> and
+   scrolls off with the page. padding-top drops the content to the water line
+   published by useWaveLine. */
 .sidebar {
-  position: sticky;
+  /* Width of the cat sprite; the line derives its rod position from this too,
+     so both stay aligned. */
+  --cat-width: calc(var(--sidebar-width) - 24px);
+
+  position: absolute;
   top: 0;
-  height: 100vh;
+  left: 0;
   width: var(--sidebar-width);
-  flex-shrink: 0;
 
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  overflow-y: auto;
-  padding: 0 max(1vw, 6px);
+  padding: var(--wave-line-y, 320px) max(1vw, 6px) 0;
 }
 
+/* Sinks the boat so its hull bottom rests on the water's surface.
+   The sprite is 130x81, but the boat only occupies the top 61 rows — the last
+   20 rows are just the fishing line, which is meant to hang below the surface.
+   So the hull, not the sprite box, is what gets aligned to the water. */
+.fishercatWrap {
+  --cat-height: calc(var(--cat-width) * 81 / 130);
+  /* Distance from the sprite's top down to the bottom of the boat hull. */
+  --hull-bottom: calc(var(--cat-height) * 61 / 81);
+  /* Depth into the wave strip where its gradient turns to opaque water
+     (the 70% stop in .waves) — that's the visible surface line. */
+  --water-line: calc(var(--wave-height) * 0.7);
+
+  position: relative;
+  width: var(--cat-width);
+  /* Sidebar content starts at --wave-line-y, so shift up by the hull height
+     and back down to the surface. */
+  margin: calc(var(--water-line) - var(--hull-bottom)) auto 0;
+  z-index: 1;
+}
+
+.fishercat {
+  /* block, not inline: an inline image adds descender space below the sprite,
+     which would offset the fishing line hanging off the wrapper's bottom. */
+  display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+  animation: fishercat-bob 6s ease-in-out infinite;
+}
+
+.fishercatActivated {
+  position: absolute;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+}
+
+:global([data-tab-hovered]) .fishercatActivated {
+  visibility: visible;
+}
+
+:global([data-tab-hovered]) .fishercatIdle {
+  visibility: hidden;
+}
+
+.drawerToggle {
+  display: none;
+}
+
+.backdrop {
+  display: none;
+}
+
+/* Hangs off the cat wrapper, so it starts exactly where the sprite's own line
+   ends (bottom-right of the sprite) with no position formulas to keep in sync.
+   Height is set inline by Sidebar.tsx from useFishingLine's measurement. */
 .sidebarLine {
   position: absolute;
-  right: 0.52vw;
-  width: 0.125vw;
+  top: 100%;
+  right: 0;
+  width: max(0.125vw, 2px);
   background: #4a4a509e;
   pointer-events: none;
-  transition: height 0.3s ease, opacity 0.2s ease;
+  transition: height 0.3s ease;
   z-index: 2;
   animation: bobber-bob 6s ease-in-out infinite;
 }
@@ -64,7 +132,7 @@
   font-size: clamp(12px, 1.1vw, 16px);
   padding: max(0.5vw, 6px) max(0.7vw, 8px);
   cursor: pointer;
-  width: 90%;
+  width: fit-content;
   text-align: left;
   transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
@@ -75,9 +143,104 @@
   color: #e8f8e8;
 }
 
-.sidebarFish-icon {
+.sidebarFishIcon {
   width: clamp(18px, 2vw, 32px);
   height: clamp(18px, 2vw, 32px);
   image-rendering: pixelated;
   flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+  .sidebar {
+    /* Wider drawer wants a bigger cat; the line derives from --cat-width too. */
+    --cat-width: clamp(150px, 46vw, 240px);
+    --drawer-width: min(75vw, 320px);
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100dvh;
+    width: var(--drawer-width);
+    padding: var(--wave-line-y, 121px) 16px 16px;
+    overflow: hidden;
+
+    /* The whole sidebar (cat + line + tabs) slides in/out as one unit. */
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+    z-index: 50;
+  }
+
+  .sidebarOpen {
+    transform: translateX(0);
+  }
+
+  /* Left-align the cat in the wider drawer (like desktop) instead of centering
+     it, so the boat hugs the left edge. */
+  .fishercatWrap {
+    margin-left: 0;
+    margin-right: auto;
+  }
+
+  /* Room below the cat for the fixed toggle button to sit clear of the tabs. */
+  .sidebarNav {
+    margin-top: 72px;
+  }
+
+  .drawerToggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: calc(var(--wave-line-y, 121px) + 44px);
+    left: 12px;
+    width: 48px;
+    height: 48px;
+    background: #2a4a2a;
+    border: 2px solid #3a5a3a;
+    border-radius: 4px;
+    cursor: pointer;
+    z-index: 60;
+  }
+
+  .drawerToggle img {
+    width: 28px;
+    height: 28px;
+    image-rendering: pixelated;
+  }
+
+  .drawerToggle[aria-expanded='true'] {
+    border-color: #c8a96e;
+  }
+
+  .backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: transparent;
+    z-index: 40;
+  }
+
+  .sidebarTab {
+    font-size: 16px;
+    gap: 10px;
+    padding: 10px 12px;
+  }
+
+  .sidebarFishIcon {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar,
+  .sidebarTab,
+  .sidebarLine {
+    transition: none;
+  }
+
+  .sidebarLine,
+  .fishercat {
+    animation: none;
+  }
 }

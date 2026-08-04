@@ -1,8 +1,13 @@
 'use client'
 
-import { useState, useRef, useLayoutEffect } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import fisImg from '@/assets/fis.png'
+import fishercatIdleImg from '@/assets/fishercat_idle.png'
+import fishercatActivatedImg from '@/assets/fishercat_activated.png'
+import { useDrawer } from '@/hooks/useDrawer'
+import { useFishingLine } from '@/hooks/useFishingLine'
 import styles from './Sidebar.module.css'
 
 interface Tab {
@@ -12,71 +17,74 @@ interface Tab {
 }
 
 const TABS: Tab[] = [
-  { label: 'Home',          id: 'home', url: '/' },
+  { label: 'Home',          id: 'home',          url: '/' },
   { label: 'Meet the Band', id: 'meet-the-band', url: '/meet-the-band' },
-  { label: 'Contact Us',    id: 'contact-us', url: '/contact-us' },
+  { label: 'Contact Us',    id: 'contact-us',    url: '/contact-us' },
 ]
 
 export default function Sidebar() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-  const [lineLength, setLineLength] = useState(40)
-  const tabRefs    = useRef<(HTMLAnchorElement | null)[]>([])
-  const sidebarRef = useRef<HTMLElement | null>(null)
+  const drawer   = useDrawer()
+  const pathname = usePathname()
 
-  useLayoutEffect(() => {
-    const sidebarEl = sidebarRef.current
+  // The line follows the hovered tab, or rests on the current page's tab.
+  const activeIndex = TABS.findIndex(tab => tab.url === pathname)
+  const lineTargetIndex = hoveredIndex ?? (activeIndex !== -1 ? activeIndex : null)
 
-    if (hoveredIndex === null || !sidebarEl) {
-        setLineLength(40)
-        return
-    }
-
-    const tabEl = tabRefs.current[hoveredIndex]
-    if (!tabEl) {
-      setLineLength(40)
-      return
-    }
-
-    const sidebarRect = sidebarEl.getBoundingClientRect()
-    const tabRect     = tabEl.getBoundingClientRect()
-    const tabMidY     = tabRect.top + tabRect.height / 2 - sidebarRect.top
-
-    setLineLength(tabMidY)
-  }, [hoveredIndex]);
-
-  useLayoutEffect(() => {
-    document.documentElement.toggleAttribute('data-tab-hovered', hoveredIndex !== null)
-    return () => document.documentElement.removeAttribute('data-tab-hovered')
-  }, [hoveredIndex]);
+  const { sidebarRef, anchorRef, tabRefs, lineLength } = useFishingLine(lineTargetIndex)
 
   return (
-    <aside className={styles.sidebar} ref={sidebarRef}>
+    <>
+      <button
+        className={styles.drawerToggle}
+        aria-expanded={drawer.isOpen}
+        aria-controls="site-navigation"
+        aria-label={drawer.isOpen ? 'Close navigation' : 'Open navigation'}
+        onClick={drawer.toggle}
+      >
+        <img src={fisImg.src} alt="" />
+      </button>
 
-      <div
-        className={styles.sidebarLine}
-        style={{
-          top:     `-5px`,
-          height:  `${lineLength}px`,
-          opacity: lineLength > 0 ? 1 : 0,
-        }}
-      />
+      {drawer.isOpen && <div className={styles.backdrop} onClick={drawer.close} />}
 
-      <nav className={styles.sidebarNav}>
-        {TABS.map((tab, i) => (
-          <Link
-            key={tab.id}
-            href={tab.url}
-            ref={el => {tabRefs.current[i] = el}}
-            className={`${styles.sidebarTab} ${hoveredIndex === i ? styles.sidebarTabActive : ''}`}
-            onMouseEnter={() => setHoveredIndex(i)}
-            onMouseLeave={() => setHoveredIndex(null)}
-          >
-            <img src={fisImg.src} alt="" className={styles.sidebarFishIcon} />
-            <span>{tab.label}</span>
-          </Link>
-        ))}
-      </nav>
+      <aside
+        id="site-navigation"
+        className={`${styles.sidebar} ${drawer.isOpen ? styles.sidebarOpen : ''}`}
+        ref={sidebarRef}
+      >
+        <div className={styles.fishercatWrap} ref={anchorRef}>
+          <img
+            src={fishercatIdleImg.src}
+            alt="Fishercat in a boat, waiting for a fish to bite"
+            className={`${styles.fishercat} ${styles.fishercatIdle}`}
+          />
+          <img
+            src={fishercatActivatedImg.src}
+            alt="Fishercat in a boat, excited about a biting fish"
+            className={`${styles.fishercat} ${styles.fishercatActivated}`}
+          />
 
-    </aside>
+          {/* Nested in the wrapper so it hangs from the sprite's own line. */}
+          <div className={styles.sidebarLine} style={{ height: `${lineLength}px` }} />
+        </div>
+
+        <nav className={styles.sidebarNav}>
+          {TABS.map((tab, i) => (
+            <Link
+              key={tab.id}
+              href={tab.url}
+              ref={el => { tabRefs.current[i] = el }}
+              className={`${styles.sidebarTab} ${lineTargetIndex === i ? styles.sidebarTabActive : ''}`}
+              onMouseEnter={() => setHoveredIndex(i)}
+              onMouseLeave={() => setHoveredIndex(null)}
+              onClick={drawer.close}
+            >
+              <img src={fisImg.src} alt="" className={styles.sidebarFishIcon} />
+              <span>{tab.label}</span>
+            </Link>
+          ))}
+        </nav>
+      </aside>
+    </>
   )
 }

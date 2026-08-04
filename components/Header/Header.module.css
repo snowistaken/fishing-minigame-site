@@ -3,8 +3,9 @@
     animation: none;
   }
 
-  .fishercat {
-    animation: none;
+  .cloud,
+  .logo {
+    transition: none;
   }
 
   .waves {
@@ -25,15 +26,8 @@
   100% { background-position: var(--wave-tile-width) 0, bottom; }
 }
 
-@keyframes fishercat-bob {
-  0%   { transform: translateY(0); }
-  50%  { transform: translateY(-0.4vw); }
-  100% { transform: translateY(0); }
-}
-
 .header {
   --logo-width: clamp(220px, 45vw, 800px);
-  --wave-height: 38px;
   --wave-tile-width: 64px;
 
   position: relative;
@@ -53,28 +47,6 @@
 
   transform: translateY(-20%);
   margin-bottom: calc(var(--logo-width) * 2 / 3 * -0.2);
-}
-
-.fishercat {
-  position: absolute;
-  bottom: calc(var(--wave-height) - max(var(--sidebar-width) * 2 / 3 * 0.4, 30px));
-  left: 1.5vw;
-  width: calc(var(--sidebar-width) - 2vw);
-  image-rendering: pixelated;
-  z-index: 1;
-  animation: fishercat-bob 6s ease-in-out infinite;
-}
-
-.fishercatActivated {
-  visibility: hidden;
-}
-
-:global([data-tab-hovered]) .fishercatActivated {
-  visibility: visible;
-}
-
-:global([data-tab-hovered]) .fishercatIdle {
-  visibility: hidden;
 }
 
 .cloud {
@@ -106,11 +78,38 @@
   animation-direction: reverse;
 }
 
+@media (max-width: 600px) {
+  .cloud {
+    bottom: calc(var(--logo-width) * 0.30);
+    transition: left 0.35s ease, right 0.35s ease, opacity 0.35s ease;
+  }
+
+  :global([data-drawer-open]) .cloudLeft {
+    left: calc(50% - var(--logo-width) * 0.62 - 16vw);
+    opacity: 0.25;
+  }
+
+  :global([data-drawer-open]) .cloudRight {
+    right: calc(50% - var(--logo-width) * 0.62 - 16vw);
+    opacity: 0.25;
+  }
+
+  .logo {
+    transition: opacity 0.35s ease;
+  }
+
+  :global([data-drawer-open]) .logo {
+    opacity: 0.35;
+  }
+}
+
 .waves {
   animation: wave-move 6s linear infinite;
   height: var(--wave-height);
   position: relative;
-  z-index: 2;
+  /* Above the cat on desktop AND above the mobile drawer's stacking context
+     (z-index 50), so the boat always tucks behind the waves. */
+  z-index: 56;
   background-image:
     url('../../assets/wave_tile.png'),
     linear-gradient(

@@ -1,10 +1,17 @@
 :root {
-  --sidebar-width: 20vw;
+  --sidebar-width: max(20vw, 150px);
+  /* Height of the header's wave strip. Lives here (not in Header.module.css)
+     because the sidebar also needs it to sink the boat to the right depth. */
+  --wave-height: 38px;
   color-scheme: only light;
 }
 
 body {
   margin: 0;
+}
+
+html[data-drawer-open] {
+  overflow: hidden;
 }
 
 p {
@@ -36,6 +43,10 @@ body {
   align-items: flex-start;
   width: 100%;
   min-height: 100vh;
+  /* Clip the content's sideways shift when the drawer opens so it can't add a
+     horizontal scrollbar. clip (not hidden) avoids making this a scroll
+     container, so the desktop sidebar's vertical scroll-off is unaffected. */
+  overflow-x: clip;
 }
 
 .app-main {
@@ -62,8 +73,6 @@ body {
 }
 
 .app-content {
-  display: flex;
-  align-items: flex-start;
   flex: 1;
 }
 
@@ -72,6 +81,27 @@ body {
   justify-content: flex-start;
   padding: 3vw 8vw;
   flex-direction: column;
+  margin-left: var(--sidebar-width);
+  transition: transform 0.35s ease;
+}
+
+html[data-drawer-open] .app-content__pages {
+  transform: translateX(min(55vw, 200px));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-content__pages {
+    transition: none;
+  }
+}
+
+/* On mobile the drawer toggle is a fixed button in the top-left water area;
+   push page content down so it starts below the button instead of underneath it. */
+@media (max-width: 600px) {
+  .app-content__pages {
+    padding-top: 90px;
+    margin-left: 0;
+  }
 }
 
 .critters {

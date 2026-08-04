@@ -1,9 +1,10 @@
-import AboutUs from '@/components/AboutUs/AboutUs.jsx'
-import { fetchEvents } from '@/lib/calendar'
+import AboutUs from '@/components/AboutUs/AboutUs'
+import { fetchEvents, type FormattedCalendarEvent } from '@/lib/calendar'
 
 export default async function Home() {
-  let upcomingEvents = []
-  let pastEvents = []
+  let upcomingEvents: FormattedCalendarEvent[] = []
+  let pastEvents: FormattedCalendarEvent[] = []
+
   try {
     ;[upcomingEvents, pastEvents] = await Promise.all([
       fetchEvents('upcoming'),
