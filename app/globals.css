@@ -106,7 +106,9 @@ html[data-drawer-open] .app-content__pages {
 
 .critters {
   position: absolute;
-  bottom: 15px;
+  /* Stand the critters on the taller sand, above the footer text and clear of it
+     even as the window narrows. Mobile overrides this below. */
+  bottom: 76px;
   right: 60px;
   width: 100%;
   height: 180px;
@@ -123,11 +125,40 @@ html[data-drawer-open] .app-content__pages {
   margin-top: auto;
   width: 100%;
 
-  height: 120px;
+  /* Taller sand (tile scaled 2x, kept crisp) gives the footer text breathing
+     room below the raised critters. Mobile overrides the height below. */
+  height: 150px;
 
   background-image: url('../assets/lake_bottom.png');
-  background-size: auto auto;
+  background-size: auto 126px;
   background-repeat: repeat-x;
   background-position: bottom center;
+  image-rendering: pixelated;
+
+  /* Bottom-align the footer so its text sits down on the sand rather than
+     floating in the water above it. */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+/* Mobile footer tuning. Kept after the base .critters/.lake-bottom rules above
+   so these overrides win on source order (media queries don't add specificity). */
+@media (max-width: 600px) {
+  /* Shrink the critters and raise them so they stand on the sand at the top of
+     the footer, leaving the text to flow full-width across the sand below. */
+  .critters {
+    height: 90px;
+    right: 6px;
+    bottom: 78px;
+  }
+
+  /* Give the footer a taller sand band (the tile scaled 2x, kept crisp). The
+     bottom-alignment is inherited from the base .lake-bottom rule. */
+  .lake-bottom {
+    height: 190px;
+    background-size: auto 126px;
+    image-rendering: pixelated;
+  }
 }
 

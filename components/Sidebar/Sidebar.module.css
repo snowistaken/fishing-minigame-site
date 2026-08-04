@@ -82,15 +82,17 @@
   display: none;
 }
 
-/* Hangs off the cat wrapper, so it starts exactly where the sprite's own line
-   ends (bottom-right of the sprite) with no position formulas to keep in sync.
-   Height is set inline by Sidebar.tsx from useFishingLine's measurement. */
+/* Hangs off the cat wrapper, continuing the sprite's own fishing line. The
+   sprite is 130px wide and its line is a single opaque column at the far right
+   (#504a4a), so the CSS line pins to right: 0 and matches that column's scaled
+   width (cat-width / 130) and colour exactly — no offset, step, or shade change
+   at the seam. Height is set inline by Sidebar.tsx from useFishingLine. */
 .sidebarLine {
   position: absolute;
   top: 100%;
   right: 0;
-  width: max(0.125vw, 2px);
-  background: #4a4a509e;
+  width: calc(var(--cat-width) / 130);
+  background: #504a4a;
   pointer-events: none;
   transition: height 0.3s ease;
   z-index: 2;

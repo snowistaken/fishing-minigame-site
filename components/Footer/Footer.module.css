@@ -1,0 +1,27 @@
+.footer {
+  box-sizing: border-box;
+  color: #3d2417;
+  line-height: 1.5;
+  padding: 8px 16px;
+}
+
+.footer p {
+  margin: 0;
+}
+
+.footer a {
+  color: #5c3a24;
+  text-decoration: underline;
+}
+
+/* On mobile the critters stand at the top of the sand (see .lake-bottom in
+   globals.css), leaving the footer text to flow full-width across the sand
+   below them. */
+@media (max-width: 600px) {
+  .footer {
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.6;
+    padding: 0 16px 14px;
+  }
+}
