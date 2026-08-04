@@ -1,0 +1,51 @@
+/* A single event, styled as a slip of parchment tacked to the wooden board.
+   Text spacing comes from the flex gap so it doesn't fight DialogBox's
+   `.dialogBox p { margin: 0 }` rule on specificity. */
+.poster {
+  --paper: #fdedf9;
+  --ink: #3d2417;
+
+  position: relative;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  padding: clamp(14px, 1.6vw, 22px) clamp(16px, 1.9vw, 26px);
+  background: var(--paper);
+  color: var(--ink);
+  /* Two-tone hard (unblurred) drop shadow — a soft near step then a deeper one —
+     so it reads as pixel art rather than a blurred material card. */
+  box-shadow:
+    3px 3px 0 #fae3ef,
+    6px 6px 0 #dfcdda;
+
+  transform: rotate(var(--tilt, 0deg));
+}
+
+/* Overhangs the top edge so it looks driven through the paper into the board. */
+.pin {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 26px;
+  height: auto;
+  image-rendering: pixelated;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.summary {
+  font-size: clamp(16px, 1.45vw, 21px);
+  line-height: 1.25;
+}
+
+.location {
+  font-size: clamp(14px, 1.2vw, 18px);
+}
+
+.date {
+  font-size: clamp(13px, 1.05vw, 16px);
+  opacity: 0.72;
+}

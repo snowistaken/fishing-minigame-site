@@ -1,0 +1,10 @@
+/* The stack of posters on the board. Top padding leaves room for the first
+   poster's pin to overhang; the gap keeps each pin clear of the poster above. */
+.posters {
+  list-style: none;
+  margin: 0;
+  padding: 15px 0 6px;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(26px, 2.6vw, 36px);
+}

@@ -1,5 +1,7 @@
 import DialogBox from '../DialogBox/DialogBox'
+import EventPoster from '../EventPoster/EventPoster'
 import type { FormattedCalendarEvent } from '@/lib/calendar'
+import styles from './EventList.module.css'
 
 interface EventListProps {
   title: string
@@ -15,13 +17,11 @@ export default function EventList({ title, events, emptyMessage = 'Nothing to sh
       {events.length === 0 ? (
         <p>{emptyMessage}</p>
       ) : (
-        events.map(event => (
-          <div key={event.id}>
-            <p>{event.summary}</p>
-            <p>{event.location}</p>
-            <p>{event.displayDate}</p>
-          </div>
-        ))
+        <ul className={styles.posters}>
+          {events.map((event, index) => (
+            <EventPoster key={event.id} event={event} index={index} />
+          ))}
+        </ul>
       )}
     </DialogBox>
   )

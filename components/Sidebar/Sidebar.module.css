@@ -192,7 +192,9 @@
     justify-content: center;
     position: fixed;
     top: calc(var(--wave-line-y, 121px) + 44px);
-    left: 12px;
+    /* Line the toggle's left edge up with the nav tabs below it: the sidebar's
+       16px padding plus the nav's 4px padding. */
+    left: 20px;
     width: 48px;
     height: 48px;
     background: #2a4a2a;
