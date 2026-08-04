@@ -190,7 +190,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    position: fixed;
+    /* Absolute (not fixed) so the toggle sits at the water line and scrolls off
+       with the header scene, instead of hovering over the boards on scroll.
+       Anchored to .app-main, which is position: relative. */
+    position: absolute;
     top: calc(var(--wave-line-y, 121px) + 44px);
     /* Line the toggle's left edge up with the nav tabs below it: the sidebar's
        16px padding plus the nav's 4px padding. */
