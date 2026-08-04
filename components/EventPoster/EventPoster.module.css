@@ -14,11 +14,10 @@
   padding: clamp(14px, 1.6vw, 22px) clamp(16px, 1.9vw, 26px);
   background: var(--paper);
   color: var(--ink);
-  /* Two-tone hard (unblurred) drop shadow — a soft near step then a deeper one —
-     so it reads as pixel art rather than a blurred material card. */
-  box-shadow:
-    3px 3px 0 #fae3ef,
-    6px 6px 0 #dfcdda;
+  /* A solid rose border plus a single hard (unblurred) drop shadow, echoing the
+     board's outlined pixel-panel look while keeping the paper lifted off it. */
+  border: 3px solid #caa1bc;
+  box-shadow: 4px 4px 0 #c9aec2;
 
   transform: rotate(var(--tilt, 0deg));
 }
