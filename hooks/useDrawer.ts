@@ -1,4 +1,5 @@
-import { useState, useLayoutEffect, useEffect } from 'react'
+import { useState, useEffect } from 'react'
+import { useRootFlag } from './useRootFlag'
 
 // Owns the mobile nav drawer's open state. Publishes it as data-drawer-open on
 // the document root so CSS elsewhere (page content shift, scroll lock) can react
@@ -6,10 +7,7 @@ import { useState, useLayoutEffect, useEffect } from 'react'
 export function useDrawer() {
   const [isOpen, setIsOpen] = useState(false)
 
-  useLayoutEffect(() => {
-    document.documentElement.toggleAttribute('data-drawer-open', isOpen)
-    return () => document.documentElement.removeAttribute('data-drawer-open')
-  }, [isOpen])
+  useRootFlag('data-drawer-open', isOpen)
 
   useEffect(() => {
     if (!isOpen) return
