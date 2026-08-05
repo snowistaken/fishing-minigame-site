@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import DialogBox from '@/components/DialogBox/DialogBox'
+import ContactUs from '@/components/ContactUs/ContactUs'
 
 export const metadata: Metadata = {
   title: 'Contact Us',
@@ -7,11 +8,11 @@ export const metadata: Metadata = {
     'Get in touch with Fishing Minigame about gigs, recording, and arranging services.',
 }
 
-export default function ContactUs() {
+export default function ContactUsPage() {
   return (
     <DialogBox>
       <h2>Contact Us</h2>
-      <p>Get in touch with us!</p>
+      <ContactUs />
     </DialogBox>
   )
 }
