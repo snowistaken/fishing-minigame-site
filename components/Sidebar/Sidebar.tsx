@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import fisImg from '@/assets/fis.png'
+import menuFishImg from '@/assets/menu_fish.png'
 import fishercatIdleImg from '@/assets/fishercat_idle.png'
 import fishercatActivatedImg from '@/assets/fishercat_activated.png'
 import { useDrawer } from '@/hooks/useDrawer'
@@ -74,7 +75,7 @@ export default function Sidebar() {
         aria-label={drawer.isOpen ? 'Close navigation' : 'Open navigation'}
         onClick={drawer.toggle}
       >
-        <img src={fisImg.src} alt="" />
+        <img src={menuFishImg.src} alt="" />
       </button>
 
       {drawer.isOpen && <div className={styles.backdrop} onClick={drawer.close} />}

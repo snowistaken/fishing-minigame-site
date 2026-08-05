@@ -183,40 +183,30 @@
     margin-right: auto;
   }
 
-  /* Room below the cat for the fixed toggle button to sit clear of the tabs. */
+  /* Room below the cat so the toggle sits clear of the tabs. */
   .sidebarNav {
     margin-top: 72px;
   }
 
+  /* Just the menu_fish.png image, no button chrome. Absolute (not fixed) so it
+     sits at the water line and scrolls off with the header scene instead of
+     hovering over the boards; left aligns with the nav tabs below. */
   .drawerToggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* Absolute (not fixed) so the toggle sits at the water line and scrolls off
-       with the header scene, instead of hovering over the boards on scroll.
-       Anchored to .app-main, which is position: relative. */
+    display: block;
     position: absolute;
     top: calc(var(--wave-line-y, 121px) + 44px);
-    /* Line the toggle's left edge up with the nav tabs below it: the sidebar's
-       16px padding plus the nav's 4px padding. */
     left: 20px;
-    width: 48px;
-    height: 48px;
-    background: #2a4a2a;
-    border: 2px solid #3a5a3a;
-    border-radius: 4px;
-    cursor: pointer;
     z-index: 60;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
   }
 
   .drawerToggle img {
-    width: 28px;
-    height: 28px;
+    display: block;
+    width: 84px;
     image-rendering: pixelated;
-  }
-
-  .drawerToggle[aria-expanded='true'] {
-    border-color: #c8a96e;
   }
 
   .backdrop {

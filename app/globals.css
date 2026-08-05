@@ -8,6 +8,7 @@
 
 body {
   margin: 0;
+  font-family: 'PixAntiqua', sans-serif;
 }
 
 html[data-drawer-open] {
@@ -32,10 +33,6 @@ h2 {
 @font-face {
   font-family: 'PixAntiqua';
   src: url('../assets/PixAntiqua.ttf') format('truetype');
-}
-
-body {
-  font-family: 'PixAntiqua', sans-serif;
 }
 
 .app-layout {
@@ -95,8 +92,8 @@ html[data-drawer-open] .app-content__pages {
   }
 }
 
-/* On mobile the drawer toggle is a fixed button in the top-left water area;
-   push page content down so it starts below the button instead of underneath it. */
+/* On mobile the drawer toggle sits in the top-left water area; push page content
+   down so it starts below the toggle instead of underneath it. */
 @media (max-width: 600px) {
   .app-content__pages {
     padding-top: 90px;
