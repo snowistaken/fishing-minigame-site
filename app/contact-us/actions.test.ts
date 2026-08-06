@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { sendContactMessage, type ContactState } from './actions'
-import { INQUIRY_TYPES } from '@/lib/site'
+import { INQUIRY_TYPES, MAX_MESSAGE_LENGTH } from '@/lib/site'
 
 const mocks = vi.hoisted(() => ({
   send: vi.fn(),
@@ -156,7 +156,8 @@ describe('field validation', () => {
   )
 
   it('rejects a message longer than the allowed limit', async () => {
-    const result = await sendContactMessage(IDLE, makeFormData({ message: 'x'.repeat(5001) }))
+    const message = 'x'.repeat(MAX_MESSAGE_LENGTH + 1)
+    const result = await sendContactMessage(IDLE, makeFormData({ message }))
 
     expect(result.ok).toBe(false)
     expect(result.error).toMatch(/too long/i)
@@ -164,7 +165,8 @@ describe('field validation', () => {
   })
 
   it('accepts a message exactly at the limit', async () => {
-    const result = await sendContactMessage(IDLE, makeFormData({ message: 'x'.repeat(5000) }))
+    const message = 'x'.repeat(MAX_MESSAGE_LENGTH)
+    const result = await sendContactMessage(IDLE, makeFormData({ message }))
 
     expect(result.ok).toBe(true)
   })

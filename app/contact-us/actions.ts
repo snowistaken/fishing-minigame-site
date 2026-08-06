@@ -2,14 +2,13 @@
 
 import { headers } from 'next/headers'
 import { Resend } from 'resend'
-import { CONTACT_FROM, INQUIRY_TYPES } from '@/lib/site'
+import { CONTACT_FROM, INQUIRY_TYPES, MAX_MESSAGE_LENGTH } from '@/lib/site'
 
 export type ContactState = {
   ok: boolean
   error?: string
 }
 
-const MAX_MESSAGE_LENGTH = 5000
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 // Cloudflare Turnstile server-side check. Tokens are single-use and short-lived
@@ -57,7 +56,9 @@ export async function sendContactMessage(
 
   if (!name || !email || !message) return { ok: false, error: 'Please fill in every field.' }
   if (!EMAIL_RE.test(email)) return { ok: false, error: 'Please enter a valid email address.' }
-  if (message.length > MAX_MESSAGE_LENGTH) return { ok: false, error: 'That message is a bit too long. (Limit 5000 characters)' }
+  if (message.length > MAX_MESSAGE_LENGTH) {
+    return { ok: false, error: `That message is a bit too long. (Limit ${MAX_MESSAGE_LENGTH} characters)` }
+  }
 
   const to = process.env.CONTACT_TO_EMAIL
   const apiKey = process.env.RESEND_API_KEY

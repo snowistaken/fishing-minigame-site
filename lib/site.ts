@@ -15,3 +15,8 @@ export const INQUIRY_TYPES = [
   'Having FMG arrange music for my game/project/etc.',
   'Other',
 ] as const
+
+// Longest contact message we accept. Shared by the form (the textarea's
+// maxLength, which is a convenience) and the server action (which enforces it),
+// so the browser hint and the real limit can't disagree.
+export const MAX_MESSAGE_LENGTH = 5000

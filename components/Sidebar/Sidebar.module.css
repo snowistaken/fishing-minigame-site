@@ -14,9 +14,21 @@
    scrolls off with the page. padding-top drops the content to the water line
    published by useWaveLine. */
 .sidebar {
+  /* Fishercat sprite geometry, measured from fishercat_idle.png (the activated
+     sprite shares it). Naming these lets the rules below be written in terms of
+     the artwork instead of bare ratios — swap the sprite, update these three. */
+  --sprite-width: 130;      /* natural width, px */
+  --sprite-height: 81;      /* natural height, px */
+  --sprite-hull-rows: 61;   /* rows occupied by the boat; the rest is the
+                               dangling fishing line, which hangs below water */
+
   /* Width of the cat sprite; the line derives its rod position from this too,
      so both stay aligned. */
   --cat-width: calc(var(--sidebar-width) - 24px);
+
+  /* One sprite pixel at the current display size. With this, sizes below read
+     as "N sprite pixels" rather than as scaling arithmetic. */
+  --sprite-px: calc(var(--cat-width) / var(--sprite-width));
 
   position: absolute;
   top: 0;
@@ -29,14 +41,13 @@
   padding: var(--wave-line-y, 320px) max(1vw, 6px) 0;
 }
 
-/* Sinks the boat so its hull bottom rests on the water's surface.
-   The sprite is 130x81, but the boat only occupies the top 61 rows — the last
-   20 rows are just the fishing line, which is meant to hang below the surface.
-   So the hull, not the sprite box, is what gets aligned to the water. */
+/* Sinks the boat so its hull bottom rests on the water's surface. The hull, not
+   the sprite box, is what gets aligned — the rows below the hull are just the
+   fishing line, which is meant to hang below the surface. */
 .fishercatWrap {
-  --cat-height: calc(var(--cat-width) * 81 / 130);
+  --cat-height: calc(var(--sprite-px) * var(--sprite-height));
   /* Distance from the sprite's top down to the bottom of the boat hull. */
-  --hull-bottom: calc(var(--cat-height) * 61 / 81);
+  --hull-bottom: calc(var(--sprite-px) * var(--sprite-hull-rows));
   /* Depth into the wave strip where its gradient turns to opaque water
      (the 70% stop in .waves) — that's the visible surface line. */
   --water-line: calc(var(--wave-height) * 0.7);
@@ -82,16 +93,16 @@
   display: none;
 }
 
-/* Hangs off the cat wrapper, continuing the sprite's own fishing line. The
-   sprite is 130px wide and its line is a single opaque column at the far right
-   (#504a4a), so the CSS line pins to right: 0 and matches that column's scaled
-   width (cat-width / 130) and colour exactly — no offset, step, or shade change
-   at the seam. Height is set inline by Sidebar.tsx from useFishingLine. */
+/* Hangs off the cat wrapper, continuing the sprite's own fishing line. That line
+   is a single opaque column (#504a4a) at the sprite's far right, so this pins to
+   right: 0 and is exactly one sprite pixel wide in the same colour — no offset,
+   step, or shade change at the seam where the two meet. Height is set inline by
+   Sidebar.tsx from useFishingLine. */
 .sidebarLine {
   position: absolute;
   top: 100%;
   right: 0;
-  width: calc(var(--cat-width) / 130);
+  width: var(--sprite-px);
   background: #504a4a;
   pointer-events: none;
   transition: height 0.3s ease;

@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react'
-import type { FormattedCalendarEvent } from '@/lib/calendar'
+import { isTbaLocation, type FormattedCalendarEvent } from '@/lib/calendar'
 import pinGreen  from '@/assets/pin_green.png'
 import pinYellow from '@/assets/pin_yellow.png'
 import pinRed    from '@/assets/pin_red.png'
@@ -25,9 +25,8 @@ export default function EventPoster({ event, index, pinIndex }: EventPosterProps
   const pin  = PINS[pinIndex % PINS.length]
   const tilt = TILTS[index % TILTS.length]
 
-  // "TBA" is the calendar's placeholder for an unset venue — show it as plain
-  // text rather than linking to a meaningless map search.
-  const isTba = event.location?.trim().toUpperCase() === 'TBA'
+  // A TBA venue shows as plain text rather than linking to a pointless map search.
+  const isTba = isTbaLocation(event.location)
 
   return (
     <li className={styles.poster} style={{ '--tilt': tilt } as CSSProperties}>

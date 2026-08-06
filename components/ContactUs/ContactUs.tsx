@@ -3,7 +3,7 @@
 import { useActionState } from 'react'
 import { Turnstile } from '@marsidev/react-turnstile'
 import { sendContactMessage, type ContactState } from '@/app/contact-us/actions'
-import { INQUIRY_TYPES } from '@/lib/site'
+import { INQUIRY_TYPES, MAX_MESSAGE_LENGTH } from '@/lib/site'
 import styles from './ContactUs.module.css'
 
 const INITIAL: ContactState = { ok: false }
@@ -51,7 +51,7 @@ export default function ContactUs() {
 
       <label className={styles.field}>
         <span>Message</span>
-        <textarea name="message" required rows={5} maxLength={5000} />
+        <textarea name="message" required rows={5} maxLength={MAX_MESSAGE_LENGTH} />
       </label>
 
       {siteKey && <Turnstile siteKey={siteKey} className={styles.turnstile} />}

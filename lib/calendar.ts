@@ -16,6 +16,13 @@ export interface FormattedCalendarEvent extends CalendarEvent {
   displayDate: string
 }
 
+// The calendar uses "TBA" as the placeholder for a venue that isn't booked yet.
+// Callers check this before treating a location as a real place — linking it to
+// a map search or emitting it as a schema.org Place would both be meaningless.
+export function isTbaLocation(location?: string): boolean {
+  return location?.trim().toUpperCase() === 'TBA'
+}
+
 function buildCalendarUrl(maxResults: number, timeMin: string, timeMax: string) {
   const calendarId = process.env.CALENDAR_ID
   const apiKey     = process.env.CALENDAR_API_KEY

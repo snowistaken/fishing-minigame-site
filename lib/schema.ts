@@ -1,5 +1,5 @@
 import { BASE_URL } from './site'
-import type { FormattedCalendarEvent } from './calendar'
+import { isTbaLocation, type FormattedCalendarEvent } from './calendar'
 
 const NAME = 'Fishing Minigame'
 const SAME_AS = [
@@ -51,7 +51,7 @@ export function eventsSchema(events: FormattedCalendarEvent[]) {
     if (!startDate || !event.summary) return []
 
     const location = event.location?.trim()
-    const hasVenue = !!location && location.toUpperCase() !== 'TBA'
+    const hasVenue = !!location && !isTbaLocation(location)
 
     return [
       {
