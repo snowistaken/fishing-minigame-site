@@ -3,7 +3,22 @@
   /* Height of the header's wave strip. Lives here (not in Header.module.css)
      because the sidebar also needs it to sink the boat to the right depth. */
   --wave-height: 38px;
+  /* How far down the wave strip (as a fraction) the gradient turns to opaque
+     water — the visible surface line. Shared by the header's wave gradient and
+     the sidebar's boat placement so the two can't drift apart: change it here
+     and the boat stays sitting on the surface. */
+  --water-surface-depth: 0.7;
+  /* Where the wave strip sits, measured from the top of <main> and published by
+     useWaveLine once the header lays out. This is the pre-measurement guess so
+     the first paint is close; the mobile override matches its shorter header. */
+  --wave-line-y-fallback: 320px;
   color-scheme: only light;
+}
+
+@media (max-width: 600px) {
+  :root {
+    --wave-line-y-fallback: 121px;
+  }
 }
 
 body {

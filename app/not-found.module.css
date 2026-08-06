@@ -1,0 +1,10 @@
+/* Clears the heading above so the poster's pin can overhang its top edge. */
+.notice {
+  margin-top: 26px;
+}
+
+.homeLink {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

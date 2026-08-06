@@ -38,19 +38,19 @@
     opacity: var(--opacity);
   }
   25% {
-    transform: translate(calc(var(--drift-x) * 0.25 + var(--sway)), calc((var(--wave-line-y, 300px) - 100cqh) * 0.25));
+    transform: translate(calc(var(--drift-x) * 0.25 + var(--sway)), calc((var(--wave-line-y, var(--wave-line-y-fallback)) - 100cqh) * 0.25));
   }
   50% {
-    transform: translate(calc(var(--drift-x) * 0.5  - var(--sway)), calc((var(--wave-line-y, 300px) - 100cqh) * 0.5));
+    transform: translate(calc(var(--drift-x) * 0.5  - var(--sway)), calc((var(--wave-line-y, var(--wave-line-y-fallback)) - 100cqh) * 0.5));
   }
   75% {
-    transform: translate(calc(var(--drift-x) * 0.75 + var(--sway)), calc((var(--wave-line-y, 300px) - 100cqh) * 0.75));
+    transform: translate(calc(var(--drift-x) * 0.75 + var(--sway)), calc((var(--wave-line-y, var(--wave-line-y-fallback)) - 100cqh) * 0.75));
   }
   90% {
     opacity: var(--opacity);
   }
   100% {
-    transform: translate(var(--drift-x), calc(var(--wave-line-y, 300px) - 100cqh));
+    transform: translate(var(--drift-x), calc(var(--wave-line-y, var(--wave-line-y-fallback)) - 100cqh));
     opacity: 0;
   }
 }

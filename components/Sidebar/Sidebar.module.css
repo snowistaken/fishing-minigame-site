@@ -38,7 +38,7 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  padding: var(--wave-line-y, 320px) max(1vw, 6px) 0;
+  padding: var(--wave-line-y, var(--wave-line-y-fallback)) max(1vw, 6px) 0;
 }
 
 /* Sinks the boat so its hull bottom rests on the water's surface. The hull, not
@@ -48,9 +48,9 @@
   --cat-height: calc(var(--sprite-px) * var(--sprite-height));
   /* Distance from the sprite's top down to the bottom of the boat hull. */
   --hull-bottom: calc(var(--sprite-px) * var(--sprite-hull-rows));
-  /* Depth into the wave strip where its gradient turns to opaque water
-     (the 70% stop in .waves) — that's the visible surface line. */
-  --water-line: calc(var(--wave-height) * 0.7);
+  /* Depth into the wave strip where the water turns opaque — the same
+     --water-surface-depth token that positions the gradient stop in .waves. */
+  --water-line: calc(var(--wave-height) * var(--water-surface-depth));
 
   position: relative;
   width: var(--cat-width);
@@ -174,7 +174,7 @@
     left: 0;
     height: 100dvh;
     width: var(--drawer-width);
-    padding: var(--wave-line-y, 121px) 16px 16px;
+    padding: var(--wave-line-y, var(--wave-line-y-fallback)) 16px 16px;
     overflow: hidden;
 
     /* The whole sidebar (cat + line + tabs) slides in/out as one unit. */
@@ -205,7 +205,7 @@
   .drawerToggle {
     display: block;
     position: absolute;
-    top: calc(var(--wave-line-y, 121px) + 44px);
+    top: calc(var(--wave-line-y, var(--wave-line-y-fallback)) + 44px);
     left: 20px;
     z-index: 60;
     padding: 0;

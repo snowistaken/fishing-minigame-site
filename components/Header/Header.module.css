@@ -132,8 +132,8 @@
     url('../../assets/wave_tile.png'),
     linear-gradient(
       transparent               0%  50%,
-      rgba(90, 185, 232, 0.75)  50% 70%,
-      #4ab2e6e2                   70% 100%
+      rgba(90, 185, 232, 0.75)  50% calc(100% * var(--water-surface-depth)),
+      #4ab2e6e2                   calc(100% * var(--water-surface-depth)) 100%
     );
   background-size: var(--wave-tile-width), cover;
   background-repeat: repeat-x, no-repeat;

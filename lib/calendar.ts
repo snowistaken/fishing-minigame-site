@@ -3,6 +3,12 @@ const CALENDAR_API_BASE = 'https://www.googleapis.com/calendar/v3/calendars'
 const REVALIDATE_SECONDS = 3600
 const DISPLAY_COUNT = 10
 
+// The API returns past events oldest-first, so showing the most recent
+// DISPLAY_COUNT means fetching a window and slicing from the end. This is the
+// window: if the band ever logs more than this many past shows, the oldest fall
+// out of range (fine) — bump it before then.
+const PAST_FETCH_WINDOW = 250
+
 export type EventRange = 'upcoming' | 'past'
 
 export interface CalendarEvent {
@@ -49,11 +55,12 @@ function buildQueryDateRange(type: EventRange): { timeMin: string; timeMax: stri
   if (type === 'upcoming') {
     return { timeMin: now.toISOString(), timeMax: new Date(8.64e15).toISOString(), maxResults: DISPLAY_COUNT }
   } else {
-    return { timeMin: '2000-01-01T00:00:00Z', timeMax: now.toISOString(), maxResults: 250 }
+    return { timeMin: '2000-01-01T00:00:00Z', timeMax: now.toISOString(), maxResults: PAST_FETCH_WINDOW }
   }
 }
 
-// Helpful for when I want to format the location to link to maps
+// Adds the human-readable date, rendered in the band's home timezone so a
+// late-evening Portland show doesn't drift to the next day for UTC viewers.
 function formatEvent(event: CalendarEvent): FormattedCalendarEvent {
   const rawDate = event.start.dateTime ?? event.start.date ?? ''
 
