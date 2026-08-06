@@ -32,6 +32,7 @@ const TAB_CLOSE_DELAY_MS = 450
 export default function Sidebar() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const [tappedIndex,  setTappedIndex]  = useState<number | null>(null)
+  const [opening,      setOpening]      = useState(false)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const drawer   = useDrawer()
   const pathname = usePathname()
@@ -46,6 +47,11 @@ export default function Sidebar() {
   // Swaps the cat to its "activated" sprite while a tab is hovered or (on mobile)
   // freshly tapped (CSS in Sidebar.module.css keys off this attribute).
   useRootFlag('data-tab-hovered', hoveredIndex !== null || tappedIndex !== null)
+
+  // Parts the header clouds (Header.module.css) from the moment the menu starts
+  // opening — before the scroll-to-top — so returning to the top doesn't fly them
+  // back in and then out again. Stays set right through until the drawer closes.
+  useRootFlag('data-clouds-parted', opening || drawer.isOpen)
 
   useEffect(() => () => {
     if (closeTimer.current) clearTimeout(closeTimer.current)
@@ -66,6 +72,48 @@ export default function Sidebar() {
     }, TAB_CLOSE_DELAY_MS)
   }
 
+  // The drawer is a fixed overlay whose cat only lines up with the header's water
+  // line when the page is at the top. So on open, glide gently to the top first,
+  // then slide the drawer in once the scroll settles — the boat lands on the
+  // surface, and the two motions read as one sequence rather than a jump.
+  function handleMenuToggle() {
+    if (drawer.isOpen) {
+      drawer.close()
+      return
+    }
+
+    if (opening) return // already gliding to the top from a prior tap
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (window.scrollY <= 1 || reduceMotion) {
+      window.scrollTo({ top: 0 })
+      drawer.open()
+      return
+    }
+
+    // Part the clouds and glide to the top; slide the drawer in once we arrive.
+    setOpening(true)
+
+    let opened = false
+    let fallback: ReturnType<typeof setTimeout>
+    const openAtTop = () => {
+      if (opened) return
+      opened = true
+      clearTimeout(fallback)
+      window.removeEventListener('scrollend', openAtTop)
+      // Guarantee we're at the top before opening (in case the glide was
+      // interrupted or scrollend never fires), so the cat lands on the surface.
+      if (window.scrollY > 1) window.scrollTo({ top: 0 })
+      setOpening(false)
+      drawer.open()
+    }
+    // scrollend opens the drawer the instant the glide settles; the timeout is a
+    // rAF-independent safety net for browsers without scrollend.
+    window.addEventListener('scrollend', openAtTop, { once: true })
+    fallback = setTimeout(openAtTop, 800)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
   return (
     <>
       <button
@@ -73,7 +121,7 @@ export default function Sidebar() {
         aria-expanded={drawer.isOpen}
         aria-controls="site-navigation"
         aria-label={drawer.isOpen ? 'Close navigation' : 'Open navigation'}
-        onClick={drawer.toggle}
+        onClick={handleMenuToggle}
       >
         <img src={menuFishImg.src} alt="" />
       </button>

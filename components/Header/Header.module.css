@@ -84,21 +84,30 @@
     transition: left 0.35s ease, right 0.35s ease, opacity 0.35s ease;
   }
 
-  :global([data-drawer-open]) .cloudLeft {
-    left: calc(50% - var(--logo-width) * 0.62 - 16vw);
+  /* While the drawer is opening/open, the clouds part to a fixed spot and stop
+     tracking scroll — so returning to the top to open the drawer doesn't fly them
+     back in and straight out again. Overriding transform (and transitioning it)
+     neutralises the scroll-driven fly-out smoothly. */
+  :global([data-clouds-parted]) .cloud {
     opacity: 0.25;
+    transition: transform 0.35s ease, opacity 0.35s ease, left 0.35s ease, right 0.35s ease;
   }
 
-  :global([data-drawer-open]) .cloudRight {
+  :global([data-clouds-parted]) .cloudLeft {
+    left: calc(50% - var(--logo-width) * 0.62 - 16vw);
+    transform: translateX(0);
+  }
+
+  :global([data-clouds-parted]) .cloudRight {
     right: calc(50% - var(--logo-width) * 0.62 - 16vw);
-    opacity: 0.25;
+    transform: translateX(0);
   }
 
   .logo {
     transition: opacity 0.35s ease;
   }
 
-  :global([data-drawer-open]) .logo {
+  :global([data-clouds-parted]) .logo {
     opacity: 0.35;
   }
 }
