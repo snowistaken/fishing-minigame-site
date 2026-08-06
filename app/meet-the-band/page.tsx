@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function MeetTheBand() {
   return (
     <DialogBox>
-      <h2>Meet the Band</h2>
+      <h1>Meet the Band</h1>
       <p>Learn more about our band members!</p>
     </DialogBox>
   )

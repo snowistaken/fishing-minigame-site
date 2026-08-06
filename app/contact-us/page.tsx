@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function ContactUsPage() {
   return (
     <DialogBox>
-      <h2>Contact Us</h2>
+      <h1>Contact Us</h1>
       <ContactUs />
     </DialogBox>
   )
