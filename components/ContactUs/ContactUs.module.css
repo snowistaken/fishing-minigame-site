@@ -71,36 +71,11 @@
   font-size: clamp(13px, 1vw, 15px);
 }
 
-/* The submission confirmation, styled as a parchment poster tacked to the board
-   to match the event posters (same paper, border, and hard drop shadow). */
+/* Status live region wrapping the confirmation. Drops the shared <Poster> clear
+   of the heading above so its pin can overhang; the parchment look lives in the
+   Poster component (see components/Poster). */
 .confirmation {
-  position: relative;
-  margin-top: 26px; /* room for the pin overhanging above */
-  padding: clamp(16px, 1.8vw, 24px) clamp(18px, 2vw, 28px);
-  background: #fff5e2;
-  color: #3d2417;
-  border: 3px solid #caa1bc;
-  box-shadow: 4px 4px 0 #a86844;
-  transform: rotate(-1deg);
-  font-size: clamp(15px, 1.2vw, 18px);
-  line-height: 1.4;
-}
-
-.confirmation p {
-  margin: 0;
-}
-
-/* Overhangs the top edge, as if driven through the paper into the board. */
-.pin {
-  position: absolute;
-  top: -15px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 26px;
-  height: auto;
-  image-rendering: pixelated;
-  z-index: 1;
-  pointer-events: none;
+  margin-top: 26px;
 }
 
 /* Off-screen and unfocusable, but not display:none (bots skip hidden fields). */

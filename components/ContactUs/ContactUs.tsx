@@ -2,7 +2,7 @@
 
 import { useActionState } from 'react'
 import { Turnstile } from '@marsidev/react-turnstile'
-import pinGreen from '@/assets/pin_green.png'
+import Poster from '../Poster/Poster'
 import { sendContactMessage, type ContactState } from '@/app/contact-us/actions'
 import { INQUIRY_TYPES, MAX_MESSAGE_LENGTH } from '@/lib/site'
 import styles from './ContactUs.module.css'
@@ -16,8 +16,9 @@ export default function ContactUs() {
   if (state.ok) {
     return (
       <div className={styles.confirmation} role="status">
-        <img src={pinGreen.src} alt="" className={styles.pin} />
-        <p>Thanks for reaching out — your message is on its way. We’ll get back to you soon!</p>
+        <Poster pinIndex={0} tilt="-1deg">
+          <p>Thanks for reaching out — your message is on its way. We’ll get back to you soon!</p>
+        </Poster>
       </div>
     )
   }

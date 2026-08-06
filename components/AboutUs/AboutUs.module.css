@@ -1,0 +1,5 @@
+/* Top space lets the intro poster's pin overhang below the heading without
+   colliding with it — mirrors the padding above the event posters. */
+.introPoster {
+  margin-top: 15px;
+}

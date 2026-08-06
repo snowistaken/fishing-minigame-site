@@ -1,0 +1,36 @@
+/* A slip of parchment tacked to the wooden board with a pin — the shared look
+   for event listings and the homepage intro. Text spacing comes from the flex
+   gap so it doesn't fight DialogBox's `.dialogBox p { margin: 0 }` on specificity. */
+.poster {
+  --paper: #fff5e2;
+  --ink: #3d2417;
+
+  position: relative;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  padding: clamp(14px, 1.6vw, 22px) clamp(16px, 1.9vw, 26px);
+  background: var(--paper);
+  color: var(--ink);
+  /* A solid rose border plus a single hard (unblurred) drop shadow, echoing the
+     board's outlined pixel-panel look while keeping the paper lifted off it. */
+  border: 3px solid #caa1bc;
+  box-shadow: 4px 4px 0 #a86844;
+
+  transform: rotate(var(--tilt, 0deg));
+}
+
+/* Overhangs the top edge so it looks driven through the paper into the board. */
+.pin {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 26px;
+  height: auto;
+  image-rendering: pixelated;
+  z-index: 1;
+  pointer-events: none;
+}
