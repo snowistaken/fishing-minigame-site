@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { fetchEvents, type CalendarEvent } from './calendar'
+import { fetchEvents, fetchEventsSafe, type CalendarEvent } from './calendar'
 
 // fetchEvents is the only export, so these drive it through mocked fetch/env
 // rather than reaching into the module's internals.
@@ -189,5 +189,35 @@ describe('fetchEvents — display date formatting', () => {
     const [event] = await fetchEvents('upcoming')
 
     expect(event).toMatchObject({ id: 'evt-9', summary: 'Show', location: 'Venue, Portland' })
+  })
+})
+
+describe('fetchEventsSafe — soft failure for the page', () => {
+  it('passes events through with errored: false on success', async () => {
+    mockCalendarResponse([makeEvent({ summary: 'Show' })])
+    const result = await fetchEventsSafe('upcoming')
+
+    expect(result.errored).toBe(false)
+    expect(result.events.map(e => e.summary)).toEqual(['Show'])
+  })
+
+  it('softens an API failure to an empty, errored result instead of throwing', async () => {
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {})
+    mockCalendarResponse([], false, 500)
+
+    // The distinction matters: errored tells the boards to say "couldn't load"
+    // rather than "no shows", so an outage doesn't read as an empty gig list.
+    await expect(fetchEventsSafe('upcoming')).resolves.toEqual({ events: [], errored: true })
+    expect(error).toHaveBeenCalledWith(expect.stringContaining('upcoming'), expect.anything())
+    error.mockRestore()
+  })
+
+  it('softens missing configuration the same way', async () => {
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {})
+    vi.stubEnv('CALENDAR_ID', '')
+    mockCalendarResponse([])
+
+    await expect(fetchEventsSafe('past')).resolves.toEqual({ events: [], errored: true })
+    error.mockRestore()
   })
 })

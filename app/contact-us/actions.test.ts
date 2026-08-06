@@ -81,6 +81,18 @@ describe('honeypot', () => {
     expect(result.ok).toBe(true)
     expect(mocks.send).toHaveBeenCalled()
   })
+
+  it('logs a breadcrumb so a false positive is recoverable from the logs', async () => {
+    const log = vi.spyOn(console, 'log').mockImplementation(() => {})
+    await sendContactMessage(
+      IDLE,
+      makeFormData({ website: 'autofilled.example', email: 'real.person@example.com' }),
+    )
+
+    expect(log).toHaveBeenCalledWith(expect.stringContaining('[contact] honeypot'))
+    expect(log).toHaveBeenCalledWith(expect.stringContaining('real.person@example.com'))
+    log.mockRestore()
+  })
 })
 
 describe('Turnstile verification', () => {
@@ -142,6 +154,45 @@ describe('field validation', () => {
 
     expect(result.ok).toBe(false)
     expect(mocks.send).not.toHaveBeenCalled()
+  })
+
+  it('validates before spending the single-use Turnstile token, so a typo does not burn it', async () => {
+    // If this ordering regresses, a user who typos their email gets their token
+    // redeemed by the failed attempt and the retry is rejected as "not human".
+    const fetchMock = mockTurnstile(true)
+    const result = await sendContactMessage(IDLE, makeFormData({ email: 'not-an-email' }))
+
+    expect(result.ok).toBe(false)
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+
+  it('echoes the submitted values back on a validation error, so the form can restore them', async () => {
+    // React resets form fields after every action; without the echo, a typo'd
+    // email would erase the visitor's whole message.
+    const result = await sendContactMessage(
+      IDLE,
+      makeFormData({ email: 'not-an-email', message: 'A long, laboured-over message.' }),
+    )
+
+    expect(result.values).toMatchObject({
+      email: 'not-an-email',
+      message: 'A long, laboured-over message.',
+    })
+  })
+
+  it('echoes values back when the send itself fails', async () => {
+    mocks.send.mockResolvedValue({ data: null, error: { message: 'rejected' } })
+    const result = await sendContactMessage(IDLE, makeFormData({ message: 'Keep me.' }))
+
+    expect(result.ok).toBe(false)
+    expect(result.values?.message).toBe('Keep me.')
+  })
+
+  it('does not echo values on success — the form is replaced, not restored', async () => {
+    const result = await sendContactMessage(IDLE, makeFormData())
+
+    expect(result.ok).toBe(true)
+    expect(result.values).toBeUndefined()
   })
 
   it.each(['not-an-email', 'missing@domain', 'no-at-sign.com', 'spaces in@example.com'])(

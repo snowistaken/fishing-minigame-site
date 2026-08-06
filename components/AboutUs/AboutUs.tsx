@@ -7,9 +7,18 @@ import styles from './AboutUs.module.css'
 interface AboutUsProps {
   upcomingEvents?: FormattedCalendarEvent[]
   pastEvents?: FormattedCalendarEvent[]
+  /** Calendar fetch failed for this range — show "couldn't load" instead of the
+      "no shows" copy, so an outage doesn't read as the band having no gigs. */
+  upcomingErrored?: boolean
+  pastErrored?: boolean
 }
 
-export default function AboutUs({ upcomingEvents = [], pastEvents = [] }: AboutUsProps) {
+export default function AboutUs({
+  upcomingEvents = [],
+  pastEvents = [],
+  upcomingErrored = false,
+  pastErrored = false,
+}: AboutUsProps) {
   return (
     <section>
       <DialogBox>
@@ -29,13 +38,21 @@ export default function AboutUs({ upcomingEvents = [], pastEvents = [] }: AboutU
       <EventList
         title="Upcoming Events"
         events={upcomingEvents}
-        emptyMessage="No upcoming shows right now — check back soon!"
+        emptyMessage={
+          upcomingErrored
+            ? 'Couldn’t load events right now — try again in a bit!'
+            : 'No upcoming shows right now — check back soon!'
+        }
         pinOffset={0}
       />
       <EventList
         title="Past Events"
         events={pastEvents}
-        emptyMessage="No past shows to show yet."
+        emptyMessage={
+          pastErrored
+            ? 'Couldn’t load past shows right now — try again in a bit!'
+            : 'No past shows to show yet.'
+        }
         pinOffset={upcomingEvents.length}
       />
     </section>

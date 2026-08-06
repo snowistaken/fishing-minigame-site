@@ -73,9 +73,17 @@
 
 /* Status live region wrapping the confirmation. Drops the shared <Poster> clear
    of the heading above so its pin can overhang; the parchment look lives in the
-   Poster component (see components/Poster). */
+   Poster component (see components/Poster). Also wraps the form-unavailable
+   fallback, whose links stay ink-coloured and always underlined — there they're
+   the whole point of the notice, not a decoration. */
 .confirmation {
   margin-top: 26px;
+}
+
+.confirmation a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 /* Off-screen and unfocusable, but not display:none (bots skip hidden fields). */

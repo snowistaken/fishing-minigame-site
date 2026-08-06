@@ -7,6 +7,13 @@ export const BASE_URL = 'https://fishingminigame.com'
 // env-driven (CONTACT_TO_EMAIL) so it can change without a deploy.
 export const CONTACT_FROM = 'Fishing Minigame <no-reply@fishingminigame.com>'
 
+// The band's public profiles. Shared by the schema.org sameAs data and the
+// contact form's fallback (shown when the form itself can't run).
+export const SOCIAL_LINKS = {
+  Instagram: 'https://www.instagram.com/fishing.minigame',
+  Bluesky: 'https://bsky.app/profile/fishing-minigame.bsky.social',
+} as const
+
 // Inquiry categories for the contact form's reason dropdown. Shared by the form
 // (the <option>s) and the server action (validation) so the two can't drift.
 export const INQUIRY_TYPES = [

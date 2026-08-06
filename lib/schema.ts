@@ -1,11 +1,8 @@
-import { BASE_URL } from './site'
+import { BASE_URL, SOCIAL_LINKS } from './site'
 import { isTbaLocation, type FormattedCalendarEvent } from './calendar'
 
 const NAME = 'Fishing Minigame'
-const SAME_AS = [
-  'https://www.instagram.com/fishing.minigame',
-  'https://bsky.app/profile/fishing-minigame.bsky.social',
-]
+const SAME_AS = Object.values(SOCIAL_LINKS)
 
 // The band itself. logoUrl is passed in absolute (built in the layout from the
 // imported logo asset) since schema.org wants a full URL.

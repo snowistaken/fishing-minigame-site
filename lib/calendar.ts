@@ -68,7 +68,7 @@ function formatEvent(event: CalendarEvent): FormattedCalendarEvent {
   }
 }
 
-export async function fetchEvents(type: EventRange): 
+export async function fetchEvents(type: EventRange):
   Promise<FormattedCalendarEvent[]> {
     const { timeMin, timeMax, maxResults } = buildQueryDateRange(type)
     const url = buildCalendarUrl(maxResults, timeMin, timeMax)
@@ -83,4 +83,23 @@ export async function fetchEvents(type: EventRange):
     const slicedEvents = type === 'past' ? calendarItems.slice(-DISPLAY_COUNT).reverse() : calendarItems
 
     return slicedEvents.map(formatEvent)
+}
+
+export interface EventsResult {
+  events: FormattedCalendarEvent[]
+  /** True when the calendar couldn't be reached — distinct from "no events",
+      so the boards can say "couldn't load" instead of "no shows". */
+  errored: boolean
+}
+
+// Non-throwing wrapper for pages: each range fails independently, so an outage
+// on one query softens to an explanatory empty board rather than taking down
+// the page (or the other board) with it.
+export async function fetchEventsSafe(type: EventRange): Promise<EventsResult> {
+  try {
+    return { events: await fetchEvents(type), errored: false }
+  } catch (error) {
+    console.error(`[calendar] ${type} fetch failed:`, error)
+    return { events: [], errored: true }
+  }
 }

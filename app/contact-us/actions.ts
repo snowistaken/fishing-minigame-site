@@ -4,9 +4,20 @@ import { headers } from 'next/headers'
 import { Resend } from 'resend'
 import { CONTACT_FROM, INQUIRY_TYPES, MAX_MESSAGE_LENGTH } from '@/lib/site'
 
+export type ContactValues = {
+  name: string
+  email: string
+  inquiry: string
+  message: string
+}
+
 export type ContactState = {
   ok: boolean
   error?: string
+  /** The submitted fields, echoed back on error. React resets form fields after
+      every action — failed ones included — so the form feeds these back in as
+      defaultValues to keep a typo from erasing the visitor's whole message. */
+  values?: ContactValues
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -39,13 +50,14 @@ export async function sendContactMessage(
   formData: FormData,
 ): Promise<ContactState> {
   // Honeypot: an off-screen field people never see. If it's filled, quietly
-  // pretend success so the bot doesn't learn it was caught.
-  if (String(formData.get('website') ?? '').trim()) return { ok: true }
-
-  const ip = (await headers()).get('x-forwarded-for')?.split(',')[0]?.trim() || null
-  const token = String(formData.get('cf-turnstile-response') ?? '')
-  if (!(await verifyTurnstile(token, ip))) {
-    return { ok: false, error: 'Couldn’t verify you’re human — please try again.' }
+  // pretend success so the bot doesn't learn it was caught — but leave a
+  // breadcrumb, so a false positive (e.g. overeager autofill) is recoverable
+  // from the logs rather than silently swallowed.
+  if (String(formData.get('website') ?? '').trim()) {
+    console.log(
+      `[contact] honeypot tripped · ${String(formData.get('email') ?? '')} · ${new Date().toISOString()}`,
+    )
+    return { ok: true }
   }
 
   const name = String(formData.get('name') ?? '').trim()
@@ -54,17 +66,29 @@ export async function sendContactMessage(
   const rawInquiry = String(formData.get('inquiry') ?? '')
   const inquiry = (INQUIRY_TYPES as readonly string[]).includes(rawInquiry) ? rawInquiry : 'Other'
 
-  if (!name || !email || !message) return { ok: false, error: 'Please fill in every field.' }
-  if (!EMAIL_RE.test(email)) return { ok: false, error: 'Please enter a valid email address.' }
+  // Echoed back on every error so the form can restore what the visitor typed.
+  const values: ContactValues = { name, email, inquiry, message }
+
+  // Validate before verifying Turnstile: tokens are single-use, so spending one
+  // on a submission that fails validation would leave the form holding a dead
+  // token, and the user's retry would be rejected as "not human".
+  if (!name || !email || !message) return { ok: false, error: 'Please fill in every field.', values }
+  if (!EMAIL_RE.test(email)) return { ok: false, error: 'Please enter a valid email address.', values }
   if (message.length > MAX_MESSAGE_LENGTH) {
-    return { ok: false, error: `That message is a bit too long. (Limit ${MAX_MESSAGE_LENGTH} characters)` }
+    return { ok: false, error: `That message is a bit too long. (Limit ${MAX_MESSAGE_LENGTH} characters)`, values }
+  }
+
+  const ip = (await headers()).get('x-forwarded-for')?.split(',')[0]?.trim() || null
+  const token = String(formData.get('cf-turnstile-response') ?? '')
+  if (!(await verifyTurnstile(token, ip))) {
+    return { ok: false, error: 'Couldn’t verify you’re human — please try again.', values }
   }
 
   const to = process.env.CONTACT_TO_EMAIL
   const apiKey = process.env.RESEND_API_KEY
   if (!to || !apiKey) {
     console.error('[contact] missing CONTACT_TO_EMAIL or RESEND_API_KEY')
-    return { ok: false, error: 'The form isn’t set up right now — please email us directly.' }
+    return { ok: false, error: 'The form isn’t set up right now — please email us directly.', values }
   }
 
   const { error } = await new Resend(apiKey).emails.send({
@@ -77,7 +101,7 @@ export async function sendContactMessage(
 
   if (error) {
     console.error('[contact] Resend error:', error)
-    return { ok: false, error: 'Something went wrong sending your message — please try again.' }
+    return { ok: false, error: 'Something went wrong sending your message — please try again.', values }
   }
 
   // Breadcrumb for the Netlify function logs so a submission is findable later.
