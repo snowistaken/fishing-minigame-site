@@ -1,0 +1,62 @@
+/* Ambient music notes drifting up from the critters in the footer to the water
+   surface, behind the page content. The field covers <main> and reads its own
+   height via container units (cqh/cqw), so notes rise the full water column on
+   any page regardless of content length. */
+.field {
+  position: absolute;
+  inset: 0;
+  /* Above <main>'s water gradient (thanks to isolation on .app-main) but behind
+     every piece of content, so notes rise through the water behind the boards. */
+  z-index: -1;
+  container-type: size;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.note {
+  position: absolute;
+  bottom: 0;
+  left: var(--start-x);
+  width: var(--size);
+  height: auto;
+  image-rendering: pixelated;
+  opacity: 0;
+  animation: note-rise var(--duration) linear var(--delay) infinite;
+  will-change: transform, opacity;
+}
+
+/* Rise from the footer to the water surface (--wave-line-y from the top of
+   <main>, published by useWaveLine), fanning out horizontally with a gentle
+   sway and fading out as they surface. The opaque sand/critters mask their
+   birth at the very bottom. */
+@keyframes note-rise {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  6% {
+    opacity: var(--opacity);
+  }
+  25% {
+    transform: translate(calc(var(--drift-x) * 0.25 + var(--sway)), calc((var(--wave-line-y, 300px) - 100cqh) * 0.25));
+  }
+  50% {
+    transform: translate(calc(var(--drift-x) * 0.5  - var(--sway)), calc((var(--wave-line-y, 300px) - 100cqh) * 0.5));
+  }
+  75% {
+    transform: translate(calc(var(--drift-x) * 0.75 + var(--sway)), calc((var(--wave-line-y, 300px) - 100cqh) * 0.75));
+  }
+  90% {
+    opacity: var(--opacity);
+  }
+  100% {
+    transform: translate(var(--drift-x), calc(var(--wave-line-y, 300px) - 100cqh));
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .field {
+    display: none;
+  }
+}

@@ -51,6 +51,9 @@ h2 {
   display: flex;
   flex-direction: column;
   position: relative;
+  /* Own stacking context so the music-notes field (z-index: -1) sits above the
+     water gradient but behind all content. */
+  isolation: isolate;
 
   background: linear-gradient(
     to bottom,

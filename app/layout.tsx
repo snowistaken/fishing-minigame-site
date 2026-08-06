@@ -4,6 +4,7 @@ import './globals.css'
 import Header from '@/components/Header/Header'
 import Footer from '@/components/Footer/Footer'
 import Sidebar from '@/components/Sidebar/Sidebar'
+import MusicNotes from '@/components/MusicNotes/MusicNotes'
 import ScrollEffects from '@/components/ScrollEffects/ScrollEffects'
 import { BASE_URL } from '@/lib/site'
 
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <ScrollEffects />
 
           <main className="app-main">
+            <MusicNotes />
             <Header />
 
             <div className="app-content">

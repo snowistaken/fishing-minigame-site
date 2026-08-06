@@ -24,10 +24,11 @@
   font-family: inherit;
   font-size: clamp(14px, 1.1vw, 16px);
   color: #3d2417;
-  background: #fdf3e0;
-  border: 2px solid #5c3a24;
+  background: #fff5e2;
+  border: 2px solid #caa1bc;
   border-radius: 4px;
   padding: 8px 10px;
+  box-shadow: 4px 4px 0 #a86844;
 }
 
 .field textarea {
@@ -38,8 +39,7 @@
 .field input:focus,
 .field select:focus,
 .field textarea:focus {
-  outline: 2px solid #c8a96e;
-  outline-offset: 1px;
+  outline: 2px solid #5c3a24;
 }
 
 .turnstile {
