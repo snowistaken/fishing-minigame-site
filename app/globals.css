@@ -166,7 +166,7 @@ html[data-drawer-open] .app-content__pages {
   /* Shrink the critters and raise them so they stand on the sand at the top of
      the footer, leaving the text to flow full-width across the sand below. */
   .critters {
-    height: 90px;
+    height: 140px;
     right: 6px;
     bottom: 78px;
   }

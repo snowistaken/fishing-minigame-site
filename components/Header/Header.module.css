@@ -79,7 +79,16 @@
 }
 
 @media (max-width: 600px) {
+  /* Scale the header scene up ~20% on mobile. The clouds size and position
+     themselves relative to --logo-width, so bumping it here enlarges the logo
+     and clouds together while preserving their alignment. */
+  .header {
+    --logo-width: clamp(264px, 54vw, 960px);
+  }
+
   .cloud {
+    /* 14% smaller than the base 0.5 (0.5 * 0.9), leaving the logo untouched. */
+    width: calc(var(--logo-width) * 0.43);
     bottom: calc(var(--logo-width) * 0.30);
     transition: left 0.35s ease, right 0.35s ease, opacity 0.35s ease;
   }
